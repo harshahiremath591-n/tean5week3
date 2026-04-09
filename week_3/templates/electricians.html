@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Electricians</title>
+<style>
+body {font-family:Arial;background:#f4f6f9;}
+
+nav {
+    background:#007bff;
+    padding:15px;
+}
+nav a {
+    color:white;
+    margin:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.container {
+    width:450px;
+    margin:40px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.2);
+}
+
+input,button {
+    width:100%;
+    padding:10px;
+    margin:5px;
+}
+
+button {
+    background:green;
+    color:white;
+    border:none;
+}
+
+.card {
+    background:#eef;
+    padding:10px;
+    margin:5px;
+    border-radius:5px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<a href="/dashboard">Dashboard</a>
+<a href="/tasks">Tasks</a>
+<a href="/jobs">Jobs</a>
+<a href="/materials">Materials</a>
+<a href="/electricians">Electricians</a>
+</nav>
+
+<div class="container">
+
+<h2>👷 Electricians</h2>
+
+<form method="POST">
+<input name="name" placeholder="Name">
+<input name="phone" placeholder="Phone">
+<button>Add</button>
+</form>
+
+{% for m in data %}
+<div class="card">
+{{m.name}} - Qty: {{m.quantity}}
+
+<br>
+<a href="/edit/material/{{m.id}}">Edit</a>
+<a href="/delete/material/{{m.id}}">Delete</a>
+</div>
+{% endfor %}
+
+</body>
+</html>

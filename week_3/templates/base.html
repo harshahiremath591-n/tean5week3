@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Electrician System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<style>
+body {font-family:Arial;background:#f4f6f9;}
+
+nav {
+    background:#007bff;
+    padding:15px;
+}
+nav a {
+    color:white;
+    margin:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.container {
+    width:450px;
+    margin:40px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.2);
+}
+
+input,button {
+    width:100%;
+    padding:10px;
+    margin:5px;
+}
+
+button {
+    background:green;
+    color:white;
+    border:none;
+}
+
+.card {
+    background:#eef;
+    padding:10px;
+    margin:5px;
+    border-radius:5px;
+}
+</style>
+<body>
+
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/electricians">Electricians</a>
+    <a href="/jobs">Jobs</a>
+    <a href="/tasks">Tasks</a>
+    <a href="/materials">Materials</a>
+</div>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>
