@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit</title>
+<style>
+body {font-family:Arial;background:#f4f6f9;}
+
+.container {
+    width:400px;
+    margin:50px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+input,button {
+    width:100%;
+    padding:10px;
+    margin:5px;
+}
+button {
+    background:orange;
+    color:white;
+    border:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Edit {{type}}</h2>
+
+<form method="POST">
+
+{% if type == 'task' %}
+<input name="desc" value="{{item.description}}">
+<input name="status" value="{{item.status}}">
+
+{% elif type == 'job' %}
+<input name="title" value="{{item.title}}">
+<input name="location" value="{{item.location}}">
+
+{% elif type == 'material' %}
+<input name="name" value="{{item.name}}">
+<input name="qty" value="{{item.quantity}}">
+
+{% elif type == 'electrician' %}
+<input name="name" value="{{item.name}}">
+<input name="phone" value="{{item.phone}}">
+{% endif %}
+
+<button>Update</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
