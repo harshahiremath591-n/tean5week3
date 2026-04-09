@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, jsonify
 from models import db, User, Task, Job, Material, Electrician
 import os
 
@@ -6,7 +6,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'sqlit
 app = Flask(__name__)
 app.secret_key = "1234"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+import os
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -14,7 +16,7 @@ db.init_app(app)
 # ✅ CREATE TABLES SAFELY
 with app.app_context():
     db.create_all()
-
+    db.init_app(app)
 # ---------------- LOGIN ----------------
 @app.route('/', methods=['GET', 'POST'])
 def login():
