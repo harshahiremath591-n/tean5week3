@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {font-family:Arial;background:#f4f6f9;}
+
+nav {
+    background:#007bff;
+    padding:15px;
+    text-align:center;
+}
+nav a {
+    color:white;
+    margin:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.container {
+    width:450px;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.2);
+    text-align:center;
+}
+
+.card {
+    display:block;
+    background:#eef;
+    padding:12px;
+    margin:10px;
+    border-radius:5px;
+    text-decoration:none;
+    color:black;
+    font-weight:bold;
+}
+
+.logout {
+    display:block;
+    text-align:center;
+    margin-top:20px;
+    color:red;
+    text-decoration:none;
+}
+
+/* graph box */
+.chart-box {
+    width:500px;
+    margin:30px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.2);
+}
+</style>
+
+</head>
+
+<body>
+
+<h1 style="text-align:center;">⚡ Dashboard</h1>
+
+<nav>
+<a href="/tasks">Tasks</a>
+<a href="/jobs">Jobs</a>
+<a href="/materials">Materials</a>
+<a href="/electricians">Electricians</a>
+
+</nav>
+
+<div class="container">
+
+<a href="/tasks" class="card">📋 Tasks</a>
+<a href="/jobs" class="card">💼 Jobs</a>
+<a href="/materials" class="card">🧰 Materials</a>
+<a href="/electricians" class="card">👷 Electricians</a>
+
+</div>
+
+<!-- 📊 GRAPH SECTION -->
+<div class="chart-box">
+<h3 style="text-align:center;">System Report</h3>
+<canvas id="chart"></canvas>
+</div>
+
+<a href="/logout" class="logout">Logout</a>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('chart').getContext('2d');
+
+let chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Tasks','Jobs','Materials','Electricians'],
+        datasets: [{
+            label: 'Records Count',
+            data: [0,0,0,0],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        animation: {
+            duration: 800
+        },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+// 🔥 LIVE UPDATE FUNCTION
+function updateGraph(){
+    fetch('/stats')
+    .then(res => res.json())
+    .then(data => {
+        chart.data.datasets[0].data = [
+            data.tasks,
+            data.jobs,
+            data.materials,
+            data.electricians
+        ];
+        chart.update();
+    });
+}
+
+// ⏱ auto refresh every 3 sec
+setInterval(updateGraph, 3000);
+
+// first load
+updateGraph();
+</script>
+
+</body>
+</html>
