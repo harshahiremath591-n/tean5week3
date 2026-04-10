@@ -14,14 +14,14 @@ if database_url:
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url or "sqlite:///data.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# ✅ THEN init db
+# ✅ INIT DB ONLY ONCE
 db.init_app(app)
 
 # ✅ CREATE TABLES
 with app.app_context():
     db.create_all()
     print("✅ App started successfully on server")
-    db.init_app(app)
+
 # ---------------- LOGIN ----------------
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -39,7 +39,6 @@ def login():
 
     return render_template('login.html')
 
-
 # ---------------- REGISTER ----------------
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -54,7 +53,6 @@ def register():
 
     return render_template('register.html')
 
-
 # ---------------- DASHBOARD ----------------
 @app.route('/dashboard')
 def dashboard():
@@ -68,21 +66,20 @@ def dashboard():
         e=Electrician.query.count()
     )
 
-
 # ---------------- TASKS ----------------
 @app.route('/tasks', methods=['GET','POST'])
 def tasks():
     if request.method == 'POST':
-         if not request.form:
+        if not request.form:
             return "Form data missing"
-    task = Task(
-        description=request.form.get('desc'),
-        status=request.form.get('status'),
-        job_id=request.form.get('job'),
-        electrician_id=request.form.get('electrician')
+        task = Task(
+            description=request.form.get('desc'),
+            status=request.form.get('status'),
+            job_id=request.form.get('job'),
+            electrician_id=request.form.get('electrician')
         )
-    db.session.add(task)
-    db.session.commit()
+        db.session.add(task)
+        db.session.commit()
 
     data = Task.query.all()
     jobs = Job.query.all()
@@ -94,19 +91,18 @@ def tasks():
         electricians=electricians
     )
 
-
 # ---------------- JOBS ----------------
 @app.route('/jobs', methods=['GET','POST'])
 def jobs():
     if request.method == 'POST':
         if not request.form:
-          return "Form data missing"
+            return "Form data missing"
         job = Job(
-    title=request.form.get('title'),
-    location=request.form.get('location'),
-    deadline=request.form.get('deadline'),
-    electrician_id=request.form.get('electrician')
-)
+            title=request.form.get('title'),
+            location=request.form.get('location'),
+            deadline=request.form.get('deadline'),
+            electrician_id=request.form.get('electrician')
+        )
         db.session.add(job)
         db.session.commit()
 
@@ -115,23 +111,21 @@ def jobs():
 
     return render_template('jobs.html', data=data, electricians=electricians)
 
-
 # ---------------- MATERIALS ----------------
 @app.route('/materials', methods=['GET','POST'])
 def materials():
     if request.method == 'POST':
         if not request.form:
-         return "Form data missing"
+            return "Form data missing"
         material = Material(
-    name=request.form.get('name'),
-    quantity=int(request.form.get('qty'))
-)
+            name=request.form.get('name'),
+            quantity=int(request.form.get('qty'))
+        )
         db.session.add(material)
         db.session.commit()
 
     data = Material.query.all()
     return render_template('materials.html', data=data)
-
 
 # ---------------- ELECTRICIANS ----------------
 @app.route('/electricians', methods=['GET', 'POST'])
@@ -141,24 +135,22 @@ def electricians():
 
     if request.method == 'POST':
         if not request.form:
-         return "Form data missing"
+            return "Form data missing"
         electrician = Electrician(
-    name=request.form.get('name'),
-    phone=request.form.get('phone')
-)
+            name=request.form.get('name'),
+            phone=request.form.get('phone')
+        )
         db.session.add(electrician)
         db.session.commit()
 
     data = Electrician.query.all()
     return render_template('electricians.html', data=data)
 
-
 # ---------------- LOGOUT ----------------
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/')
-
 
 #-----------------Delete-----------------
 @app.route('/delete/<type>/<int:id>')
@@ -218,8 +210,6 @@ def edit(type, id):
 
     return render_template('edit.html', item=item, type=type)
 
-from flask import jsonify
-
 @app.route('/stats')
 def stats():
     return jsonify({
@@ -228,8 +218,6 @@ def stats():
         "materials": Material.query.count(),
         "electricians": Electrician.query.count()
     })
-    
-    
-    
+
 if __name__ == "__main__":
     app.run()
