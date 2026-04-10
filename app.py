@@ -2,13 +2,16 @@ from flask import Flask, render_template, request, redirect, session, jsonify
 from models import db, User, Task, Job, Material, Electrician
 import os
 
-# ✅ FIRST create app
 app = Flask(__name__)
-
 app.secret_key = "1234"
 
-# ✅ THEN config
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'sqlite:///data.db'
+# ✅ FIX DATABASE URL (IMPORTANT FOR RENDER)
+database_url = os.environ.get('DATABASE_URL')
+
+if database_url:
+    database_url = database_url.replace("postgres://", "postgresql://")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url or "sqlite:///data.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # ✅ THEN init db
@@ -17,6 +20,7 @@ db.init_app(app)
 # ✅ CREATE TABLES
 with app.app_context():
     db.create_all()
+    print("✅ App started successfully on server")
     db.init_app(app)
 # ---------------- LOGIN ----------------
 @app.route('/', methods=['GET', 'POST'])
@@ -227,5 +231,5 @@ def stats():
     
     
     
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
